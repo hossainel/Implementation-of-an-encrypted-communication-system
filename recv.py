@@ -3,33 +3,41 @@ import string
 import time
 
 # TODO implement fonctions uncaesar et recv here
-def run_decoder(right_shift, shift, filename):#{
+
+#This function takes an encrypted message and the shift information as a parameter, and returns the message in the clear.
+def uncaesar(right_shift, shift, ENCODED_MESSAGES):#{ #the function that will decode the string or the message
     KEY_STRING = string.ascii_uppercase #+' ' # remove the previous hash for adding a space with the decoder.
     TRANSLATED = "" #Decoded Text will save here.
+    for i in ENCODED_MESSAGES:#{ #for loop for decoding strings character by character
+        j = KEY_STRING.find(i.upper())
+        if j==(-1): TRANSLATED = TRANSLATED + i.upper() #returns the previous char if not exixsts at $KEY_STRING
+        else:#{ 
+            if right_shift: KEY = j+shift #shifting formula
+            else: KEY = j-shift
+            if KEY>=len(KEY_STRING): KEY = KEY-len(KEY_STRING) #reduce the value if it is greater than the total quantity of alphabets
+            TRANSLATED = TRANSLATED + KEY_STRING[KEY]
+        #}
+    #}
+    return TRANSLATED
+#}
+
+#This function reads the new messages received in a file.
+def recv(right_shift, shift, filename):#{ #The functing that will read message
     if filename[0] == '/': r1 = 1 #Check if / included on the first char
     else: r1 = 0
-    
     #with open(filename, "r") as fob:#{ #use hash if you want to remove the following
     with open(filename[r1:], "r") as fob:#{ #opens the file tmp/f105 not /tmp/f105
         while True:#{
             MESSAGES = fob.readline() 
-            for i in MESSAGES:#{ #for loop for decoding strings
-                j = KEY_STRING.find(i.upper())
-                if j==(-1): TRANSLATED = TRANSLATED + i.upper() #returns the previous char if not exixsts at $KEY_STRING
-                else:#{ 
-                    if right_shift: KEY = j+shift
-                    else: KEY = j-shift
-                    if KEY>=len(KEY_STRING): KEY = KEY-len(KEY_STRING) #reduce the value if it is greater than the total quantity of alphabets
-                    TRANSLATED = TRANSLATED + KEY_STRING[KEY]
-                #}
-            #}
+            TRANSLATED = uncaesar(right_shift, shift, MESSAGES) #calls the uncaesar function
             if MESSAGES: print(f"New message: {MESSAGES[:-1].upper()} -> {TRANSLATED[:-1]}")
-            TRANSLATED = "" #Clears the translated string for a new line
             time.sleep(1)
         #}
         fob.close()
     #}
 #}
+
+#This is the main function
 def main():#{
     if len(sys.argv) < 4:#{
         print("Utilization: python recv.py G|D shift file.", file=sys.stderr)
@@ -44,7 +52,7 @@ def main():#{
     filename: str = sys.argv[3]
     # TODO the program begins here 
     print(f"Encrypted communication with  Ceasar {sys.argv[1]} {shift} via {filename}")
-    run_decoder(right_shift, shift, filename) #the functing that i added
+    recv(right_shift, shift, filename) #the function that will recieve message
 #}
 if __name__ == "__main__":#{
     main()
