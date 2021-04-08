@@ -3,13 +3,15 @@
 #include <cstring>
 #include <fstream>
 
+//please comment the line number 15 and 16 if you get error on send function
 using namespace std;
 
 // TODO implement the fonctions sanitize, caesar et send here
 
 //This function is responsible for writing a message on a file.
 void send(string fileName, string ENCODED_MESSAGE) {
-	string filename; //remember there is a difference between fileName and fileName
+	string filename = fileName; //remember there is a difference between fileName and fileName
+	//Comment the following two line if you get errors on writing files
 	if (fileName[0]=='/') filename = fileName.substr(1,fileName.length()); // removes the / before the tmp/f105 instead of /tmp/f105
 	else filename = fileName; //use // to comment the previous line and remove the else if you got no probs
 	ofstream file (filename, ios_base::app);

@@ -23,8 +23,9 @@ def uncaesar(right_shift, shift, ENCODED_MESSAGES):#{ #the function that will de
 
 #This function reads the new messages received in a file.
 def recv(right_shift, shift, filename):#{ #The functing that will read message
-    if filename[0] == '/': r1 = 1 #Check if / included on the first char
-    else: r1 = 0
+    r1=0
+    if filename[0] == '/': r1 = 1 #Make this line a comment if you got a error
+    else: r1 = 0                  #This line too. 
     #with open(filename, "r") as fob:#{ #use hash if you want to remove the following
     with open(filename[r1:], "r") as fob:#{ #opens the file tmp/f105 not /tmp/f105
         while True:#{
